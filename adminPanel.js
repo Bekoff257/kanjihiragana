@@ -9,11 +9,14 @@ const ADMIN_SECRET = process.env.ADMIN_SECRET || 'admin123';
 
 const app = express();
 
+// ── Health check for Railway ──────────────────────────────────────────────────
+app.get('/health', (req, res) => res.status(200).send('ok'));
+
 // ── Simple token auth middleware ──────────────────────────────────────────────
 function auth(req, res, next) {
   const token = req.query.token || req.headers['x-admin-token'];
   if (token !== ADMIN_SECRET) {
-    return res.status(401).send(`
+    return res.status(200).send(`
       <html><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0d1117">
         <form method="GET" action="/" style="background:#161b22;padding:32px;border-radius:12px;border:1px solid #30363d;display:flex;flex-direction:column;gap:12px;min-width:280px">
           <h2 style="color:#e6edf3;margin:0 0 8px">🔐 Admin Panel</h2>
