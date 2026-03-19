@@ -4,7 +4,7 @@ import {
   getActiveUsers, getHourlyStats, getTopUsers, userMap
 } from './userTracker.js';
 
-const ADMIN_PORT   = process.env.ADMIN_PORT   || 4000;
+const ADMIN_PORT   = process.env.PORT || process.env.ADMIN_PORT || 4000;
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'admin123';
 
 const app = express();
@@ -205,7 +205,7 @@ app.get('/api/stats', auth, (req, res) => {
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 export function startAdminPanel() {
-  const server = app.listen(ADMIN_PORT, () => {
+  const server = app.listen(ADMIN_PORT, '0.0.0.0', () => {
     console.log(`🖥  Admin panel → http://localhost:${ADMIN_PORT}/?token=${ADMIN_SECRET}`);
   });
 
@@ -214,7 +214,7 @@ export function startAdminPanel() {
       const next = Number(ADMIN_PORT) + 1;
       console.warn(`⚠️  Port ${ADMIN_PORT} band. ${next} portda urinib ko'rmoqda...`);
       server.close();
-      app.listen(next, () => {
+      app.listen(next, '0.0.0.0', () => {
         console.log(`🖥  Admin panel → http://localhost:${next}/?token=${ADMIN_SECRET}`);
       });
     } else {
